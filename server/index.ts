@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
+import { canonicalSearch } from '../src/engine/config'
 
 const PORT = Number(process.env.PORT ?? 3000)
 const MAX_DOWNLOAD = 1024 ** 4 // per-request download cap of 1 TiB; in practice the client aborts
@@ -53,6 +54,15 @@ app.post('/api/upload', async (c) => {
 
 // Latency: empty response
 app.all('/api/ping', (c) => c.body(null, 204, noStore))
+
+// URL canonicalization: if the home page's query string isn't canonical, 302 to the canonical one (same config.ts as the frontend)
+// 302 rather than 301: the canonical form omits defaults, so a redirect must not be cached forever if the defaults change
+app.on(['GET', 'HEAD'], '/', (c, next) => {
+  const { pathname, search } = new URL(c.req.url)
+  const want = canonicalSearch(search)
+  if (want === search) return next()
+  return c.redirect(pathname + want, 302)
+})
 
 // Static pages (Svelte build output)
 app.use('*', serveStatic({ root: './dist' }))
