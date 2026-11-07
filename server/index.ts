@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
-import { serveStatic } from 'hono/bun'
 import { canonicalSearch } from '../src/engine/config'
+import { createStaticHandler } from './static'
 
 const PORT = Number(process.env.PORT ?? 3000)
 const MAX_DOWNLOAD = 1024 ** 4 // per-request download cap of 1 TiB; in practice the client aborts
@@ -65,8 +65,9 @@ app.on(['GET', 'HEAD'], '/', (c, next) => {
 })
 
 // Static pages (Svelte build output)
-app.use('*', serveStatic({ root: './dist' }))
-app.get('*', serveStatic({ path: './dist/index.html' }))
+// Precompressed + cache headers; unknown /api/* and missing assets return 404 instead of falling back to index.html
+const serveStatic = createStaticHandler('./dist')
+app.on(['GET', 'HEAD'], '*', (c) => serveStatic(c.req.raw))
 
 export default {
   port: PORT,
