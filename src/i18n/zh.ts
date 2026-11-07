@@ -1,0 +1,52 @@
+import type { Dict } from './en'
+
+// Simplified Chinese. All zh* language tags (including Traditional users) map to this for now.
+export const zh: Dict = {
+  phase: { ping: '延迟', down: '下载', up: '上传' },
+  unit: { sec: '秒', count: '次' },
+  status: {
+    ready: '准备就绪',
+    stopped: '已停止',
+    done: '测试完成',
+    gap: (s) => `下一轮 ${s} 秒后开始`,
+    warmup: (name) => `${name} · 预热（不计入）`,
+    measure: (name) => `${name} · 测量中`,
+  },
+  round: (n, total) => (total ? `第 ${n} / ${total} 轮` : `第 ${n} 轮`),
+  tile: {
+    jitterLoss: (jitter, loss) => `抖动 ${jitter} ms · 丢包 ${loss}%`,
+    conns: (n) => `${n} 路并发`,
+  },
+  action: { start: '开始测试', stop: '停止', again: '重新测试' },
+  hint: { start: '空格键 开始', stop: '空格键 停止' },
+  noPhase: '请在设置中至少选择一个测试项目',
+  error: (detail) => `测试出错：${detail}`,
+  err: {
+    http: (phase, status) => `${phase}请求返回 HTTP ${status}`,
+    network: (phase) => `${phase}连接失败`,
+  },
+  history: { title: '每轮结果' },
+  aria: { dec: '减少', inc: '增加', lang: '语言' },
+  lang: { auto: '自动' },
+  settings: {
+    title: '设置',
+    tests: '测试项目',
+    auto: '打开页面后自动开始',
+    download: '下载',
+    upload: '上传',
+    duration: '时长',
+    conns: '并发连接',
+    general: '通用',
+    warmup: '预热',
+    warmupHint: '不计入结果',
+    pings: '延迟采样',
+    rounds: '循环次数',
+    roundsHint: '0 = 无限',
+    gap: '轮间隔',
+    share: '分享链接',
+    copy: '复制',
+    copied: '已复制',
+    locked: '测试进行中，设置已锁定',
+    reset: '恢复默认',
+  },
+}

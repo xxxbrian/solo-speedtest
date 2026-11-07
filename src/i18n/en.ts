@@ -1,0 +1,52 @@
+// Base dictionary: zh.ts must match this structure exactly (enforced by the type checker; a missing translation is an error)
+export const en = {
+  phase: { ping: 'Latency', down: 'Download', up: 'Upload' },
+  unit: { sec: 's', count: '' },
+  status: {
+    ready: 'Ready',
+    stopped: 'Stopped',
+    done: 'Done',
+    gap: (s: number) => `Next round in ${s}s`,
+    warmup: (name: string) => `${name} · warming up (not counted)`,
+    measure: (name: string) => `${name} · measuring`,
+  },
+  round: (n: number, total: number) => (total ? `Round ${n} / ${total}` : `Round ${n}`),
+  tile: {
+    jitterLoss: (jitter: string, loss: string) => `Jitter ${jitter} ms · Loss ${loss}%`,
+    conns: (n: number) => (n === 1 ? '1 connection' : `${n} connections`),
+  },
+  action: { start: 'Start test', stop: 'Stop', again: 'Test again' },
+  hint: { start: 'Space to start', stop: 'Space to stop' },
+  noPhase: 'Select at least one test in Settings',
+  error: (detail: string) => `Test failed: ${detail}`,
+  err: {
+    http: (phase: string, status: number) => `${phase} request returned HTTP ${status}`,
+    network: (phase: string) => `${phase} connection failed`,
+  },
+  history: { title: 'Results by round' },
+  aria: { dec: 'Decrease', inc: 'Increase', lang: 'Language' },
+  lang: { auto: 'Auto' },
+  settings: {
+    title: 'Settings',
+    tests: 'Tests',
+    auto: 'Start automatically when the page opens',
+    download: 'Download',
+    upload: 'Upload',
+    duration: 'Duration',
+    conns: 'Connections',
+    general: 'General',
+    warmup: 'Warm-up',
+    warmupHint: 'not counted',
+    pings: 'Latency samples',
+    rounds: 'Rounds',
+    roundsHint: '0 = unlimited',
+    gap: 'Gap between rounds',
+    share: 'Share link',
+    copy: 'Copy',
+    copied: 'Copied',
+    locked: 'Settings are locked while a test is running',
+    reset: 'Reset to defaults',
+  },
+}
+
+export type Dict = typeof en
